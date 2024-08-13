@@ -1,0 +1,117 @@
+.exam {
+  &-header {
+    &-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    &-item {
+      display: flex;
+      align-items: center;
+      img {
+        border-radius: 50%;
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        margin-right: 15px;
+      }
+      h3 {
+      }
+      p {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba($color: #000000, $alpha: 0.2);
+        text-align: center;
+        line-height: 70px;
+        font-weight: 700;
+        color: #212121;
+        font-size: 18px;
+        span {
+          color: rgb(44, 154, 181);
+        }
+      }
+    }
+  }
+  .progressbar {
+    padding: 20px 0;
+    &-content {
+      width: 100%;
+      background-color: #ccc;
+      border-radius: 10px;
+      position: relative;
+    }
+    &-inner {
+      border-radius: 10px;
+      background-color: #ace52d;
+      height: 15px;
+      font-size: 15px;
+      small {
+        color: #1d1b32;
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        font-weight: bold;
+      }
+    }
+  }
+  &-question-text {
+    padding-top: 50px;
+    font-weight: 500;
+  }
+  &-choices {
+    ul {
+      padding: 30px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      li {
+        label {
+          input {
+            margin-right: 10px;
+            &:checked + span {
+              color: dodgerblue;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.star-box {
+  display: flex;
+  justify-content: center;
+  font-size: 80px;
+  gap: 10px;
+  padding-top: 30px;
+  .star-1 {
+    padding-top: 20px;
+    animation: starMoving 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+  .star-2 {
+    animation: starMoving 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both 0.5s;
+  }
+  .star-3 {
+    padding-top: 20px;
+    animation: starMoving 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) both 1s;
+  }
+  .filled {
+    color: orange;
+  }
+  .outlined {
+    color: #ccc;
+  }
+}
+
+@keyframes starMoving {
+  0% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+  100% {
+    -webkit-transform: translateY(-20px);
+    transform: translateY(-20px);
+  }
+}
