@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const initialTime = 20;
+const initialTime = 50;
 
 const Progressbar = ({ activeQuestionIndex, handleNextQuestion, countQue, handleFinishExam }) => {
     const [timeLeft, setTimeLeft] = useState(initialTime);
