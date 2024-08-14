@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ContentHeader from '../../UI/content-header/content-header';
 import { UserService } from "../../services/user-service";
 import { Button, Drawer, Form, Image, Input, message, Popconfirm, Skeleton, Table } from 'antd';
-import { DeleteOutlined, PlusOutlined } from '@ant-design/icons';
+import { DeleteOutlined, EditOutlined, PlusOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserActions } from '../../store/user-slice';
 import { AuthService } from '../../services/auth-service';
@@ -14,6 +14,7 @@ const Student = () => {
     const { isChange, loading } = useSelector(state => state.user);
     const [students, setStudents] = useState(null);
     const [drawer, setDrawer] = useState(false);
+    const [isUpdate, setIsUpdate] = useState({ agree: false, user: null });
     const [form] = Form.useForm();
 
     const rowClassName = (record, index) => {
@@ -27,7 +28,8 @@ const Student = () => {
     }
     const closeDrawer = () => {
         setDrawer(false);
-        form.resetFields()
+        setIsUpdate(prev => ({ agree: false, user: null }));
+        form.resetFields();
     }
 
     const handleCreateStudent = async () => {
@@ -51,6 +53,30 @@ const Student = () => {
             dispatch(UserActions.reqUserSuccess())
         } catch (error) {
             console.log(error)
+            dispatch(UserActions.reqUserFailure());
+        }
+    }
+
+    const handleOpenEditable = (user) => {
+        setIsUpdate(prev => ({ agree: true, user }));
+        openDrawer();
+        const updatingUser = students.find(item => item._id === user._id);
+        const { firstName, lastName, email } = updatingUser;
+        form.setFieldsValue({ firstName, lastName, email });
+    }
+
+    const handleUpdateStudent = async () => {
+        const newInfo = form.getFieldsValue();
+        try {
+            if (!newInfo.password) delete newInfo.password;
+            if (newInfo.email === isUpdate.user.email) delete newInfo.email;
+            dispatch(UserActions.reqUserStart())
+            console.log(isUpdate)
+            await UserService.updUser(isUpdate.user._id, newInfo);
+            closeDrawer();
+            dispatch(UserActions.reqUserSuccess())
+        } catch (error) {
+            console.log(error);
             dispatch(UserActions.reqUserFailure());
         }
     }
@@ -84,16 +110,19 @@ const Student = () => {
         },
     ]
     if (role === 'admin') tableColumns = [...tableColumns, {
-        key: "amaliyot", title: "Amaliyot", render: (item) => <Popconfirm onConfirm={() => handleDeleteStudent(item._id)} title="Ishonchiz komilmi?" okText="ha" cancelText="yo'q" okType='danger'>
-            <Button icon={<DeleteOutlined />}></Button>
-        </Popconfirm>
+        key: "amaliyot", title: "Amaliyot", render: (item) => <div style={{ display: "flex", gap: "15px" }}>
+            <Popconfirm onConfirm={() => handleDeleteStudent(item._id)} title="Ishonchiz komilmi?" okText="ha" cancelText="yo'q" okType='danger'>
+                <Button icon={<DeleteOutlined />}></Button>
+            </Popconfirm>
+            <Button icon={<EditOutlined />} onClick={() => handleOpenEditable(item)}></Button>
+        </div>
     }];
     return (
         <div className='student'>
             <ContentHeader openDrawer={openDrawer} section="student" />
             {students ? <Table rowClassName={rowClassName} size='small' pagination={{ pageSize: students.length, hideOnSinglePage: true }} columns={tableColumns} dataSource={students} /> : <Skeleton active />}
-            <Drawer title="Student qo'shish" open={drawer} onClose={closeDrawer}>
-                <Form onFinish={handleCreateStudent} layout='vertical' form={form}>
+            <Drawer title={isUpdate.agree ? "Ma'lumotlarni o'zgartrish" : "Student qo'shish"} open={drawer} onClose={closeDrawer}>
+                <Form onFinish={isUpdate.agree ? handleUpdateStudent : handleCreateStudent} layout='vertical' form={form}>
                     <Form.Item name="firstName" label="Ism" rules={[{ required: true, message: "Ism kiriting" }]}>
                         <Input />
                     </Form.Item>
@@ -103,10 +132,10 @@ const Student = () => {
                     <Form.Item name="email" label="E-mail" rules={[{ required: true, message: "Email kiriting" }]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item name="password" label="Parol" rules={[{ required: true, message: "Parol kiriting" }]}>
+                    <Form.Item name="password" label="Parol" rules={[{ required: !isUpdate.agree, message: "Parol kiriting" }]}>
                         <Input.Password />
                     </Form.Item>
-                    <Button loading={loading} disabled={loading} htmlType='submit' style={{ marginTop: "30px" }} icon={<PlusOutlined />} type='primary'>Yaratish</Button>
+                    <Button loading={loading} disabled={loading} htmlType='submit' style={{ marginTop: "30px" }} icon={<PlusOutlined />} type='primary'>Saqlash</Button>
                 </Form>
             </Drawer>
         </div>

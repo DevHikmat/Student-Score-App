@@ -80,6 +80,30 @@
   }
 }
 
+.correct {
+  color: rgb(32, 138, 32);
+}
+.incorrect {
+  color: red;
+}
+
+.show-case {
+  h3 {
+    margin-bottom: 50px;
+  }
+  &-item {
+    &__card {
+      height: 100%;
+      box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+      padding: 20px;
+      border-radius: 4px;
+    }
+    h4 {
+      margin-bottom: 15px;
+    }
+  }
+}
+
 .star-box {
   display: flex;
   justify-content: center;

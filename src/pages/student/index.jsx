@@ -10,11 +10,13 @@ import { Button } from 'antd';
 import { AuthActions } from '../../store/auth-slice';
 import Exam from '../exam';
 import { AuthService } from '../../services/auth-service';
+import History from '../history';
 
 const sidebarItems = [
     { to: "/student", text: "O'yinlar", icon: "fa-gamepad" },
     { to: "/student/students", text: "Reyting", icon: "fa-trophy" },
     { to: "/student/profile", text: "Sozlamalar", icon: "fa-gear" },
+    { to: "/student/history", text: "Tarixlar", icon: "fa-history" },
 ]
 
 let profileUrl = "https://cdn.icon-icons.com/icons2/1378/PNG/512/avatardefault_92824.png";
@@ -43,7 +45,6 @@ const Student = () => {
         try {
             const myId = localStorage.getItem("myId")
             const data = await AuthService.getInfo(myId);
-            console.log(data)
             dispatch(AuthActions.authSuccess(data.user));
         } catch (error) {
             console.log(error);
@@ -158,6 +159,7 @@ const Student = () => {
                                                 <Route path='students' element={<Users />} />
                                                 <Route path='quiz/:id' element={<Exam />} />
                                                 <Route path='profile' element={<Profile />} />
+                                                <Route path='history' element={<History />} />
                                             </Routes>
                                         </div>
                                     </div>
