@@ -54,6 +54,7 @@ const Exam = () => {
                     <ExamHeader activeQuestionIndex={activeQuestionIndex} currentExam={currentExam} />
                     <Progressbar countQue={currentExam.questions.length} handleFinishExam={handleFinishExam} handleNextQuestion={handleNextQuestion} activeQuestionIndex={activeQuestionIndex} />
                     <div className='exam-question-text'>
+                        {currentExam.questions[activeQuestionIndex].questionImage && <img style={{ width: '60%', height: "300px", objectFit: "contain", display: "block" }} src={currentExam.questions[activeQuestionIndex].questionImage.url} alt='exam question image' />}
                         {currentExam.questions[activeQuestionIndex]?.questionText}
                     </div>
                     <ExamChoice getAnswerFromInput={getAnswerFromInput} question={currentExam.questions[activeQuestionIndex]} />

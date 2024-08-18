@@ -32,7 +32,6 @@ const Login = () => {
         dispatch(AuthActions.authStart());
         try {
             const data = await AuthService.login(formData);
-            console.log(data);
             dispatch(AuthActions.authSuccess(data.user));
             localStorage.setItem('token', data.token);
             localStorage.setItem('myId', data.user._id);
