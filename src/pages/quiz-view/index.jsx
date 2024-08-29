@@ -53,6 +53,7 @@ const QuizView = () => {
             dispatch(QuizActions.reqQuizStart());
             const data = await QuestionService.addQuestion(formdata);
             message.success(data.message);
+            form.resetFields();
             dispatch(QuizActions.reqQuizSuccess());
         } catch (error) {
             console.log(error);
