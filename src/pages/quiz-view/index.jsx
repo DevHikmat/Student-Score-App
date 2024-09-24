@@ -11,8 +11,6 @@ import { QuizActions } from '../../store/quiz-slice';
 
 const { TextArea } = Input;
 const { Column } = Table;
-
-
 const choiceItemCreator = (item) => {
     const { variant2, variant3, variant4 } = item;
     return { items: [{ label: variant2, key: 1 }, { label: variant3, key: 2 }, { label: variant4, key: 3 }] };
